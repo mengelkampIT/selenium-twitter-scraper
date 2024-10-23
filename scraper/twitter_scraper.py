@@ -1,9 +1,9 @@
 import os
 import sys
 import pandas as pd
-from progress import Progress
-from scroller import Scroller
-from tweet import Tweet
+from .progress import Progress
+from .scroller import Scroller
+from .tweet import Tweet
 
 from datetime import datetime
 from fake_headers import Headers
@@ -135,7 +135,7 @@ class Twitter_Scraper:
         browser_option.add_argument("--user-agent={}".format(header))
 
         # For Hiding Browser
-        browser_option.add_argument("--headless")
+        #browser_option.add_argument("--headless")
 
         try:
             # print("Initializing ChromeDriver...")
@@ -186,7 +186,7 @@ class Twitter_Scraper:
         try:
             self.driver.maximize_window()
             self.driver.get(TWITTER_LOGIN_URL)
-            sleep(3)
+            sleep(5)
 
             self._input_username()
             self._input_unusual_activity()
@@ -529,7 +529,7 @@ It may be due to the following:
 
         pass
 
-    def save_to_csv(self):
+    def save_to_csv(self, filename=None):
         print("Saving Tweets to CSV...")
         now = datetime.now()
         folder_path = "./tweets/"
@@ -564,7 +564,10 @@ It may be due to the following:
         df = pd.DataFrame(data)
 
         current_time = now.strftime("%Y-%m-%d_%H-%M-%S")
-        file_path = f"{folder_path}{current_time}_tweets_1-{len(self.data)}.csv"
+        if filename is not None:
+            file_path = f"{folder_path}{filename}.csv"
+        else:
+            file_path = f"{folder_path}{current_time}_tweets_1-{len(self.data)}.csv"
         pd.set_option("display.max_colwidth", None)
         df.to_csv(file_path, index=False, encoding="utf-8")
 
